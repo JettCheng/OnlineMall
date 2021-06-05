@@ -38,6 +38,11 @@ namespace Application.Controllers
             _tokenService = tokenService;
         }
 
+        /// <summary>
+        /// 用戶登入
+        /// </summary>
+        /// <param name="loginDto"></param>   
+        /// <returns>令牌</returns>   
         [AllowAnonymous] // 允許匿名訪問 using Authorization
         [HttpPost("login")]
             public async Task<IActionResult> Login( [FromBody] LoginDto loginDto )
@@ -62,17 +67,22 @@ namespace Application.Controllers
             return Ok(new ApiResponseWithData<string>(200,tokenStr));
         }
 
+        /// <summary>
+        /// 用戶註冊
+        /// </summary>
+        /// <param name="registerDto"></param>   
+        /// <returns>註冊資訊</returns>   
         [HttpPost]
         public async Task<IActionResult> Register( [FromBody] RegisterDto registerDto )
         {
-            // 1 使用用户名创建用户对象
+            // 1 使用用戶名創建用戶對象
             var user = new Customer()
             {
                 UserName = registerDto.Email,
                 Email = registerDto.Email
             };
 
-            // 2 hash密码，保存用户
+            // 2 hash密碼，保存用戶
             var result = await _userManager.CreateAsync(user, registerDto.Password);
             if (!result.Succeeded)
             {
@@ -83,6 +93,10 @@ namespace Application.Controllers
             return Ok(new ApiResponseWithData<RegisterDto>(200, registerDto, "已成功註冊"));
         }
 
+        /// <summary>
+        /// 用戶註冊
+        /// </summary>  
+        /// <returns>當前用戶資訊與新令牌</returns>  
         [HttpGet]
         [Authorize]
         [Authorize(AuthenticationSchemes = "Bearer")]

@@ -172,6 +172,8 @@ namespace Application.Controllers
         /// </summary>
         /// <param name="productForCreationDto"></param>   
         /// <returns>商品</returns>   
+        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost]  // https://localhost:5001/api/Products
         public async Task<IActionResult> CreateProduct([FromBody] ProductForCreationDto productForCreationDto)
         {
@@ -221,6 +223,8 @@ namespace Application.Controllers
         /// <param name="productId">商品編號</param>   
         /// <param name="patchDocument"></param>   
         /// <returns>無</returns>   
+        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPatch("{productId}")]
         public async Task<IActionResult> PartiallyUpdateProduct(
             [FromRoute] Guid productId, 
@@ -261,6 +265,8 @@ namespace Application.Controllers
         /// </summary>
         /// <param name="productId">商品編號</param>   
         /// <returns>無</returns>   
+        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpDelete("{productId}")]
         public async Task<IActionResult> DeleteProductById( [FromRoute] Guid productId )
         {

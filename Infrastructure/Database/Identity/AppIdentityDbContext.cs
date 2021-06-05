@@ -16,8 +16,8 @@ namespace Infrastructure.Database.Identity
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             
-            // 初始化用户与角色的种子数据
-            // 1. 更新用户与角色的外键关系
+            // 初始化用戶與腳色的Seeds
+            // 更新用戶與腳色的外鍵關係
             modelBuilder.Entity<Customer>(b => {
                 b.HasMany(x => x.UserRoles)
                 .WithOne()
@@ -25,7 +25,7 @@ namespace Infrastructure.Database.Identity
                 .IsRequired();
             });
 
-            // 2. 添加角色
+            // 添加角色
             var adminRoleId = "308660dc-ae51-480f-824d-7dca6714c3e2"; // guid 
             modelBuilder.Entity<IdentityRole>().HasData(
                 new IdentityRole
@@ -36,7 +36,7 @@ namespace Infrastructure.Database.Identity
                 }
             );
 
-            // 3. 添加用户
+            // 添加用户
             var adminUserId = "90184155-dee0-40c9-bb1e-b5ed07afc04e";
             Customer adminUser = new Customer
             {
@@ -54,8 +54,8 @@ namespace Infrastructure.Database.Identity
             adminUser.PasswordHash = ph.HashPassword(adminUser, "1qaz@WSX$");
             modelBuilder.Entity<Customer>().HasData(adminUser);
 
-            // 4. 给用户加入管理员权限
-            // 通过使用 linking table：IdentityUserRole
+            // 给用户加入管理員權限
+            // 通過使用 linking table：IdentityUserRole
             modelBuilder.Entity<IdentityUserRole<string>>()
                 .HasData(new IdentityUserRole<string>() 
                 {
