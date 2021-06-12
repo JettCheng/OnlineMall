@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Database.Identity.Migrations
 {
-    public partial class IdentityInit : Migration
+    public partial class updateProductType : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -162,6 +162,21 @@ namespace Infrastructure.Database.Identity.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "308660dc-ae51-480f-824d-7dca6714c3e2", "439cf160-4d78-4efc-968d-eb6ef78a083f", "Admin", "ADMIN" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedAt", "CreatedBy", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UpdatedAt", "UpdatedBy", "UserName" },
+                values: new object[] { "90184155-dee0-40c9-bb1e-b5ed07afc04e", 0, "8352edfd-e305-49cd-997f-d3b3bc07b3e7", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "admin@mail.com", true, false, null, "ADMIN@MAIL.COM", "ADMIN", "AQAAAAEAACcQAAAAEPnsa7Vqb2+sBcfnUCgQXAO13cunqmL4UtYpSlnTACV1BxpfYYQE3sTi9fo+O1Z6VQ==", "0912345678", false, "05d8f9e3-71dd-40a8-93d1-ffd6580441e9", false, null, null, "admin" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId", "CustomerId" },
+                values: new object[] { "308660dc-ae51-480f-824d-7dca6714c3e2", "90184155-dee0-40c9-bb1e-b5ed07afc04e", null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

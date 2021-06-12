@@ -1,0 +1,140 @@
+[
+    {
+        "Id": "FA",
+        "Level": 0,
+        "ParentId": "",
+        "Name": "流行時尚"
+    },
+    {
+        "Id": "LI",
+        "Level": 0,
+        "ParentId": "",
+        "Name": "生活家居"
+    },
+    {
+        "Id": "TE",
+        "Level": 0,
+        "ParentId": "",
+        "Name": "科技"
+    },
+    {
+        "Id": "CA",
+        "Level": 0,
+        "ParentId": "",
+        "Name": "休閒良品"
+    },
+    {
+        "Id": "ME",
+        "Level": 0,
+        "ParentId": "",
+        "Name": "汽車房屋"
+    },
+    {
+        "Id": "FA01",
+        "Level": 1,
+        "ParentId": "FA",
+        "Name": "男士時尚"
+    },
+    {
+        "Id": "FA02",
+        "Level": 1,
+        "ParentId": "FA",
+        "Name": "女士時尚"
+    },
+    {
+        "Id": "FA03",
+        "Level": 1,
+        "ParentId": "FA",
+        "Name": "美妝保養"
+    },
+    {
+        "Id": "FA04",
+        "Level": 1,
+        "ParentId": "FA",
+        "Name": "名牌精品"
+    },
+    {
+        "Id": "LI05",
+        "Level": 1,
+        "ParentId": "LI",
+        "Name": "圖書"
+    },
+    {
+        "Id": "LI06",
+        "Level": 1,
+        "ParentId": "LI",
+        "Name": "親子用品"
+    },
+    {
+        "Id": "LI07",
+        "Level": 1,
+        "ParentId": "LI",
+        "Name": "家電用品"
+    },
+    {
+        "Id": "LI08",
+        "Level": 1,
+        "ParentId": "LI",
+        "Name": "居家生活"
+    },
+    {
+        "Id": "TE09",
+        "Level": 1,
+        "ParentId": "TE",
+        "Name": "電腦3C"
+    },
+    {
+        "Id": "TE10",
+        "Level": 1,
+        "ParentId": "TE",
+        "Name": "手機平板"
+    },
+    {
+        "Id": "CA11",
+        "Level": 1,
+        "ParentId": "CA",
+        "Name": "單眼攝影"
+    },
+    {
+        "Id": "CA12",
+        "Level": 1,
+        "ParentId": "CA",
+        "Name": "寵物用品"
+    },
+    {
+        "Id": "CA13",
+        "Level": 1,
+        "ParentId": "CA",
+        "Name": "零食"
+    },
+    {
+        "Id": "CA14",
+        "Level": 1,
+        "ParentId": "CA",
+        "Name": "玩具"
+    },
+    {
+        "Id": "CA15",
+        "Level": 1,
+        "ParentId": "CA",
+        "Name": "運動休閒"
+    },
+    {
+        "Id": "ME16",
+        "Level": 1,
+        "ParentId": "ME",
+        "Name": "汽車"
+    },
+    {
+        "Id": "ME17",
+        "Level": 1,
+        "ParentId": "ME",
+        "Name": "汽機車零件"
+    },
+    {
+        "Id": "ME18",
+        "Level": 1,
+        "ParentId": "ME",
+        "Name": "機車"
+    }
+]

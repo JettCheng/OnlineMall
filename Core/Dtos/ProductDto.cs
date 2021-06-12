@@ -13,10 +13,12 @@ namespace Core.Dtos
         public string Description { get; set; }
         
         public double OriginalPrice { get; set; }
-        
-        public double Rate { get; set; }
 
+        public ProductTypeDto ProductType { get; set; }
+        
         public ProductStatus Status { get; set; }
+
+        public string CoverImageUrl { get; set;}   // 商品封面
         
         public ICollection<ProductImageDto> ProductImages { get; set; }
         

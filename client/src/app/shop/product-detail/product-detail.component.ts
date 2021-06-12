@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { IProduct } from 'src/app/shared/model/product';
 import { ShopService } from '../shop.service';
 
@@ -10,26 +11,29 @@ import { ShopService } from '../shop.service';
 export class ProductDetailComponent implements OnInit {
 product: IProduct;
 quantity: number = 1;
-  constructor(private shopService: ShopService) { }
+  constructor(private shopService: ShopService, private activateRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.loadProduct();
   }
   
   loadProduct() {
-    this.shopService.getProduct('e7fc3b52-9811-42bb-9180-5f92b75b90a2').subscribe(response => {
+    const id = this.activateRoute.snapshot.paramMap.get('id');
+    
+    this.shopService.getProduct(id!).subscribe(response => {
       this.product = response.data;
     }, error => {
       console.log(error);
-      console.log("product-detail error");
     });
   }
-  decrementQuantity() {
-
+  incrementQuantity() {
+    this.quantity++;
   }
 
-  incrementQuantity() {
-
+  decrementQuantity() {
+    if (this.quantity > 1) {
+      this.quantity--;
+    }
   }
 
   addItemToBasket() {

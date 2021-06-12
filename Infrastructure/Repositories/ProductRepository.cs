@@ -32,13 +32,27 @@ namespace Infrastructure.Repositories
             return await _context.Products.Include(p => p.ProductImages).FirstOrDefaultAsync(p => p.Id == productId);
         }
 
-        public async Task<PaginationList<Product>> GetProductListAsync(
+        public async Task<PaginationList<Product>> GetProductsAsync(
             int pageSize,
             int pageNumber,
-            string orderBy
+            string orderBy,
+            string keyword,
+            string productTypeId
         )
         {
-            IQueryable<Product> result = _context.Products.Include(p => p.ProductImages);
+            IQueryable<Product> result = _context.Products
+                .Include(p => p.ProductType)
+                .Include(p => p.ProductImages);
+
+            if(!string.IsNullOrEmpty(keyword))
+            {
+                result = result.Where(p => p.Title.Contains(keyword));
+            }
+            
+            if(!string.IsNullOrEmpty(productTypeId))
+            {
+                result= result.Where(p => p.ProductTypeId.Contains(productTypeId));
+            }
 
             if (!(string.IsNullOrEmpty(orderBy)))
             {
@@ -84,6 +98,16 @@ namespace Infrastructure.Repositories
         public void DeleteProduct(Product product)
         {
             _context.Products.Remove(product);
+        }
+
+        public async Task<IEnumerable<ProductType>> GetProductTypesLevel0Async(int level)
+        {
+            return await _context.ProductTypes.Where(pt => pt.Level==level).ToListAsync();
+        }
+
+        public async Task<IEnumerable<ProductType>> GetProductTypesLevel1ByPanentIdAsync(int level, string parentId)
+        {
+            return await _context.ProductTypes.Where(pt => pt.Level==level&&pt.ParentId==parentId).ToListAsync();
         }
     }
 }

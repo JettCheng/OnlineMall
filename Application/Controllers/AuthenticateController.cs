@@ -60,11 +60,15 @@ namespace Application.Controllers
             );
             if(!loginResult.Succeeded) return Unauthorized(new ApiResponse(401));
 
-            // Create Token 
-            var tokenStr = await _tokenService.CreateToken(user); 
-
+            // Create CustomerDto included token
+            var CustomerDtoToReturn = new CustomerDto 
+            {
+                Email = user.Email,
+                Token = await _tokenService.CreateToken(user),
+                Name = user.UserName
+            };
             // return 200 ok + JWT 
-            return Ok(new ApiResponseWithData<string>(200,tokenStr));
+            return Ok(new ApiResponseWithData<CustomerDto>(200, CustomerDtoToReturn));
         }
 
         /// <summary>
@@ -94,7 +98,7 @@ namespace Application.Controllers
         }
 
         /// <summary>
-        /// 用戶註冊
+        /// 取得當前用戶資訊
         /// </summary>  
         /// <returns>當前用戶資訊與新令牌</returns>  
         [HttpGet]
@@ -104,13 +108,13 @@ namespace Application.Controllers
         {
             var user = _httpContextAccessor.HttpContext.User;
             var customer = await _userManager.FindByEmailFromClaimsPrinciple(user);
-
-            return Ok(new CustomerDto 
+            var CustomerDtoToReturn = new CustomerDto 
             {
                 Email = customer.Email,
                 Token = await _tokenService.CreateToken(customer),
                 Name = customer.UserName
-            });
+            };
+            return Ok( new ApiResponseWithData<CustomerDto>(200, CustomerDtoToReturn));
         }
 
         [HttpGet]

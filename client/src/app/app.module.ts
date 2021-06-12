@@ -20,7 +20,6 @@ import { ShopModule } from './shop/shop.module';
     AppRoutingModule,
     HttpClientModule,
     CoreModule,
-    // ShopModule // 已經不需要在一開始就 import 了，何時 import 的責任已經轉交給 shop.module
   ],
   providers: [],
   bootstrap: [AppComponent]

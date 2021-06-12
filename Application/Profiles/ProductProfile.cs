@@ -2,6 +2,7 @@ using System;
 using Core.Dtos;
 using AutoMapper;
 using Core.Entities;
+using Infrastructure.Services.Common;
 
 namespace Application.Profiles
 {
@@ -14,6 +15,8 @@ namespace Application.Profiles
                     dest => dest.Status,
                     opt => opt.MapFrom(src => src.Status.ToString())
                 );
+            
+            CreateMap<PaginationList<Product>, PaginationList<ProductDto>>();
             CreateMap<ProductForCreationDto, Product>()
                 .ForMember(
                     dest => dest.Id,
@@ -46,6 +49,7 @@ namespace Application.Profiles
                 //     opt => opt.MapFrom(src => DateTime.UtcNow)
                 // );
             CreateMap<Product, ProductForUpdateDto>();
+            CreateMap<ProductType, ProductTypeDto>();
         }
     }
 }

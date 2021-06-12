@@ -18,6 +18,7 @@ namespace Infrastructure.Database.Domain
         
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<ProductType> ProductTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +30,12 @@ namespace Infrastructure.Database.Domain
             var productImagesData = File.ReadAllText(seedsUrl+"productImages.json");
             IList<ProductImage> productImages = JsonConvert.DeserializeObject<IList<ProductImage>>(productImagesData);
             modelBuilder.Entity<ProductImage>().HasData(productImages);
+            
+            var productTypesData = File.ReadAllText(seedsUrl+"productTypes.json");
+            IList<ProductType> productTypes = JsonConvert.DeserializeObject<IList<ProductType>>(productTypesData);
+            modelBuilder.Entity<ProductType>().HasData(productTypes);
+
+
         }
     }
 }

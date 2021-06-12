@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Application.Helpers;
+using Application.Extensions;
+using Infrastructure.Services.Common;
 
 namespace Application.Controllers
 {
@@ -34,90 +36,44 @@ namespace Application.Controllers
             _productRepository = productRepository;
             _urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
         }
-
-        private string GenerateTouristRouteResourceURL (
-            // ProductParameters productParameters,
-            PaginationParameters paginationParameters,
-            ResourceUriType type
-        )
-        {
-            var temp = type switch
-            {
-                ResourceUriType.PreviousPage => _urlHelper.Link("GetAllProducts",
-                    new
-                    {
-                        // keyword = productParameters.Keyword,
-                        // rating = paramaters.Rating,
-                        pageNumber = paginationParameters.PageNumber - 1,
-                        pageSize = paginationParameters.PageSize
-                    }),
-                ResourceUriType.NextPage => _urlHelper.Link("GetAllProducts",
-                    new
-                    {
-                        // keyword = productParameters.Keyword,
-                        // rating = paramaters.Rating,
-                        pageNumber = paginationParameters.PageNumber + 1,
-                        pageSize = paginationParameters.PageSize
-                    }),
-                _ => _urlHelper.Link("GetAllProducts",
-                    new
-                    {
-                        // keyword = productParameters.Keyword,
-                        // rating = paramaters.Rating,
-                        pageNumber = paginationParameters.PageNumber,
-                        pageSize = paginationParameters.PageSize
-                    })
-            };
-            return temp;
-        }
+        
         /// <summary>
-        /// 取得所有商品之商品資訊清單
+        /// 取得商品之商品資訊清單
         /// </summary>
         /// <param name="paginationParameters"></param>
-        /// <returns>商品</returns>
-        [HttpGet(Name = "GetAllProducts")]
-        [Route("all")]
-        public async Task<IActionResult> GetAllProducts( [FromQuery] PaginationParameters paginationParameters )
+        /// <param name="productParameters"></param>
+        /// <returns>商品清單</returns>
+        [HttpGet("items",Name = "GetProducts")]
+        public async Task<IActionResult> GetProducts( 
+            [FromQuery] PaginationParameters paginationParameters,
+            [FromQuery] ProductParameters productParameters
+        )
         {
             // 取得商品清單
-            var productFromRepo = await _productRepository.GetProductListAsync(
+            var productFromRepo = await _productRepository.GetProductsAsync(
                 paginationParameters.PageSize,
                 paginationParameters.PageNumber,
-                paginationParameters.OrderBy
+                paginationParameters.OrderBy, 
+                productParameters.Keyword,
+                productParameters.ProductTypeId
             );
 
             if(productFromRepo == null || productFromRepo.Count() <= 0)
             {
                 return NotFound( new ApiResponse(404, "查無商品" ) );
             }
-            
             var productListDto = _mapper.Map<IEnumerable<ProductDto>>(productFromRepo);
+            
 
             // 產生分頁資訊
-            var previousPageLink = productFromRepo.HasPrevious
-                ? GenerateTouristRouteResourceURL(
-                    paginationParameters, ResourceUriType.PreviousPage)
-                : null;
-
-            var nextPageLink = productFromRepo.HasNext
-                ? GenerateTouristRouteResourceURL(
-                    paginationParameters, ResourceUriType.NextPage)
-                : null;
-
-            // x-pagination
-            var paginationMetadata = new
-            {
-                previousPageLink,
-                nextPageLink,
-                totalCount = productFromRepo.TotalCount,
-                pageSize = productFromRepo.PageSize,
-                currentPage = productFromRepo.CurrentPage,
-                totalPages = productFromRepo.TotalPages
-            };
-
+            var paginationMetadata = PaginationInfoExtensions.GeneratePaginationInfo<Product>(
+                _urlHelper,
+                productFromRepo,
+                paginationParameters,
+                "GetProducts"
+            );
             Response.Headers.Add("x-pagination",
                 Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetadata));
-
 
             return Ok( new ApiResponseWithData<IEnumerable<ProductDto>>(200, productListDto) );
         }
@@ -148,7 +104,7 @@ namespace Application.Controllers
         [HttpGet]   // https://localhost:5001/api/Products?Keyword=%E7%AB%A5
         public async Task<IActionResult> GetProductListBySearchingAsync(
             [FromQuery] ProductParameters productParameters, 
-            [FromQuery] PaginationParameters paginationParameters 
+            [FromQuery] PaginationParameters paginationParameters
         )
         {
             var productFromRepo = await _productRepository.GetProductListBySearchingAsync(
@@ -286,6 +242,37 @@ namespace Application.Controllers
             await _productRepository.SaveAsync();
 
             return NoContent();
+        }
+    
+        /// <summary>
+        /// 取得商品主分類
+        /// </summary> 
+        /// <param name="level">分類層級</param>   
+        /// <returns>商品主分類清單</returns>   
+        [HttpGet("productTypes/{level}")]
+        public async Task<IActionResult> GetProductTypes( [FromRoute] int level)
+        {
+            var productTypesFromRepo = await _productRepository.GetProductTypesLevel0Async(level);
+            
+            var productTypesToReturn = _mapper.Map<IEnumerable<ProductTypeDto>>(productTypesFromRepo);
+
+            return Ok( new ApiResponseWithData<IEnumerable<ProductTypeDto>>(200, productTypesToReturn) );
+        }
+
+        /// <summary>
+        /// 取得商品次分類
+        /// </summary> 
+        /// <param name="level">分類層級</param>      
+        /// <param name="parentId">父分類</param>   
+        /// <returns>商品次分類清單</returns>   
+        [HttpGet("{parentId}/{level}")]
+        public async Task<IActionResult> GetProductTypes( [FromRoute] int level, string parentId)
+        {
+            var productTypesFromRepo = await _productRepository.GetProductTypesLevel1ByPanentIdAsync(level, parentId);
+            
+            var productTypesToReturn = _mapper.Map<IEnumerable<ProductTypeDto>>(productTypesFromRepo);
+
+            return Ok( new ApiResponseWithData<IEnumerable<ProductTypeDto>>(200, productTypesToReturn) );
         }
     }
 }

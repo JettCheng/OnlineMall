@@ -4,9 +4,8 @@ namespace Application.Parameters
 {
     public class ProductParameters
     {
-        [Required]
         public string Keyword { get; set; }
-        
-        
+
+        public string ProductTypeId { get; set; }
     }
 }

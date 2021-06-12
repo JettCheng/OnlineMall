@@ -44,7 +44,7 @@ namespace Infrastructure.Services.Common
             // skip
             var skip = (currentPage - 1) * pageSize;
             result = result.Skip(skip);
-            // 以pagesize为标准显示一定量的数据
+            // 以 pagesize 為標準顯示一定數量數據
             result = result.Take(pageSize);
 
             // include vs join

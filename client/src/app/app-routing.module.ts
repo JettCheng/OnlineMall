@@ -8,7 +8,11 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'shop', loadChildren: () => import('./shop/shop.module').then(mod => mod.ShopModule) },
   // { path: 'shop/:id', component: ProductDetailComponent },
-  { path: '**', redirectTo: '', pathMatch: 'full' }
+  {
+    path: 'account', loadChildren: () => import('./account/account.module').then(mod => mod.AccountModule),
+    data: { breadcrumb: {skip: true} }
+  },
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 
 @NgModule({
